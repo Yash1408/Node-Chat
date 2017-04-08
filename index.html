@@ -1,48 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Nodechat</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <script
-    src="https://code.jquery.com/jquery-3.2.1.min.js"
-    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
-
+    <title>Socket.IO chat</title>
     <style>
-      body{
-        margin-top: 40px;
-      }
+      * { box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 15px 20px; }
+      #messages li:nth-child(odd) { background: #eee; margin-right: 0;}
+      #messages { margin-bottom: 40px }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="well">
-            <h3>Online Users</h3>
-            <ul class="list-group" id="users"></ul>
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="chat" id="chat"></div>
-
-          <form class="messageForm">
-            <div class="form-group">
-              <label>Enter Message</label>
-              <textarea class="form-control" id="message"></textarea>
-              <br>
-              <input type="submit" value="Send Message"class="btn btn-primary"></input>
-            </div>
-        </div>
-
-
-<script>
-  $(function(){
-    var socket = io.connect();
-  });
-</script>
-
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function () {
+        var socket = io();
+        $('form').submit(function(){
+          socket.emit('chat message', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+        socket.on('chat message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
   </body>
 </html>
