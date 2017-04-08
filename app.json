@@ -1,0 +1,14 @@
+{
+  "name": "node--chat-io",
+  "description": "This app allows real-time messaging.",
+  "keywords": [
+    "Chat",
+    "HTML5",
+    "NODE"
+  ],
+  "repository": "https://github.com/Yash1408/Node-Chat",
+  "logo": "https://small-sharp-tool.com/logo.svg",
+  "success_url": "/welcome",
+  "scripts": {
+    "postdeploy": "bundle exec rake bootstrap"
+  },
