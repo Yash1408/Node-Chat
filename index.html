@@ -29,7 +29,7 @@
             <h3>Enter a Username</h3>
             <p id="userError"></p>
             <form class="form-group" id="userForm">
-              <input class="form-control input-xs" size="15" id="username" placeholder="Username">
+              <input class="form-control input-xs" size="15" id="username" placeholder="Username" required>
               <input type="Submit" value="Login" class="btn btn-success btn-md">
             </form>
           </div>
@@ -50,7 +50,7 @@
         <ul class="list-group" id="messages"></ul>
         <form class="form-group" id="messageForm">
 
-          <textarea id="message" class="form-control"  /></textarea>
+          <textarea id="message" class="form-control"  required></textarea>
           <input type="Submit" value="Send" class="btn btn-primary">
         </form>
       </div>
@@ -71,7 +71,8 @@
               $('#messageWrap').show();
             }
             else{
-              $('userError').html('The username is already taken, please try again');
+              var html = 'The username is already taken, please try again';
+              $('userError').html(html);
             }
           });
           $('#username').val('');
