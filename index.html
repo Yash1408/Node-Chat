@@ -6,10 +6,15 @@
 
     <style>
       * { box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      .container{display: flex;}
+      body { font: 16px Helvetica, Arial;}
       button{float: right;}
+      input{margin: 0 auto;}
       ul{text-align: center; margin: 0 auto; }
+
+      #userWrap {text-align: center; margin: 0 auto; padding-top: 50px;}
+      #messageWrap{ display: none;}
+      #userWrap { text-align: center; margin: 0 auto;}
+      #userError{height:15px;}
       #messages { list-style-type: none; }
       #messages li { padding: 15px 20px; }
       #messages li:nth-child(odd) { background: #eee;}
@@ -18,27 +23,82 @@
   </head>
   <body>
 
-    <ul class="list-group" id="messages"></ul>
-    <form class="form-group" action="">
-      <div class="container">
-      <textarea id="message" class="form-control"  /></textarea>
-      <input type="Submit" value="Send" class="btn btn-primary">
+    <div class="container" id="userWrap">
+      <div class="row">
+          <div id="userFormWrap">
+            <h3>Enter a Username</h3>
+            <p id="userError"></p>
+            <form class="form-group" id="userForm">
+              <input class="form-control input-xs" size="15" id="username" placeholder="Username">
+              <input type="Submit" value="Login" class="btn btn-success btn-md">
+            </form>
+          </div>
+        </div>
   </div>
-    </form>
+
+  <div class="container" id="messageWrap">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="well">
+          <h2>Online Users</h2>
+          <hr>
+          <div class="users">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <ul class="list-group" id="messages"></ul>
+        <form class="form-group" id="messageForm">
+
+          <textarea id="message" class="form-control"  /></textarea>
+          <input type="Submit" value="Send" class="btn btn-primary">
+        </form>
+      </div>
+    </div>
+  </div>
+
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       $(function () {
-        var socket = io();
-        $('form').submit(function(){
+        var socket = io.connect();
+
+        $('#userForm').submit(function(e){
+          e.preventDefault();
+          socket.emit('new user', $('#username').val(), function(data){
+            if(data){
+              $('#userFormWrap').hide();
+              $('#messageWrap').show();
+            }
+            else{
+              $('userError').html('The username is already taken, please try again');
+            }
+          });
+          $('#username').val('');
+        });
+
+        socket.on('usernames', function(data){
+          var html = '';
+          for(i=0; i<data.length; i++){
+            html+= data[i] + '<hr>'
+          }
+
+          $('.users').html(html);
+        });
+
+        $('#messageForm').submit(function(e){
+          e.preventDefault();
           socket.emit('chat message', $('#message').val());
           $('#message').val('');
           return false;
         });
+
         socket.on('chat message', function(msg){
-          $('#messages').append($('<li class="form-control-list">').text(msg));
+          var html = '<li class="form-control-list">'+'<strong>'+msg.user+' : </strong> '+msg.msg+'</li>';
+          $('#messages').append(html);
           window.scrollTo(0, document.body.scrollHeight);
         });
+
       });
     </script>
   </body>
