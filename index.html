@@ -10,11 +10,12 @@
       button{float: right;}
       input{margin: 0 auto;}
       ul{text-align: center; margin: 0 auto; }
-
+      .error{color: red;}
+      .private{color: grey; font-style: italic;}
       #userWrap {text-align: center; margin: 0 auto; padding-top: 50px;}
       #messageWrap{ display: none;}
       #userWrap { text-align: center; margin: 0 auto;}
-      #userError{height:15px;}
+      #userError{color:red; height:15px;}
       #messages { list-style-type: none; }
       #messages li { padding: 15px 20px; }
       #messages li:nth-child(odd) { background: #eee;}
@@ -72,7 +73,7 @@
             }
             else{
               var html = 'The username is already taken, please try again';
-              $('userError').html(html);
+              $('#userError').html(html);
             }
           });
           $('#username').val('');
@@ -89,7 +90,11 @@
 
         $('#messageForm').submit(function(e){
           e.preventDefault();
-          socket.emit('chat message', $('#message').val());
+          socket.emit('chat message', $('#message').val(), function(data){
+            //add error here;
+            var html = '<li class="form-control-list"><span class="error">'+data+'</span></li>';
+            $('#messages').append(html);
+          });
           $('#message').val('');
           return false;
         });
@@ -99,6 +104,11 @@
           $('#messages').append(html);
           window.scrollTo(0, document.body.scrollHeight);
         });
+
+        socket.on('private message', function(msg){
+          var html = '<li class="form-control-list private">'+'<strong> '+msg.user+' : </strong> '+msg.msg+'</li>';
+          $('#messages').append(html);
+        })
 
       });
     </script>
