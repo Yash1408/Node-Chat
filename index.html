@@ -3,7 +3,6 @@
   <head>
     <title>Node Socket.Io Chat</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
     <style>
       * { box-sizing: border-box; }
       body { font: 16px Helvetica, Arial;}
@@ -11,8 +10,11 @@
       input{margin: 0 auto;}
       ul{text-align: center; margin: 0 auto; }
       .error{color: red;}
+      .input{height:60px;}
       .btn{margin-top: 10px;}
+      .well{position: fixed; width:20%;}
       .private{color: grey; font-style: italic;}
+      .btn-private{margin:0; }
       #userWrap {text-align: center; margin: 0 auto; padding-top: 50px;}
       #messageWrap{ display: none;}
       #userWrap { text-align: center; margin: 0 auto;}
@@ -52,7 +54,7 @@
         <ul class="list-group" id="messages"></ul>
         <form class="form-group" id="messageForm">
 
-          <textarea id="message" class="form-control"  required></textarea>
+          <input id="message" class="form-control input"  required></input>
           <input type="Submit" value="Send" class="btn btn-primary">
         </form>
       </div>
