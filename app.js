@@ -3,8 +3,27 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
+// var mongoose = require('mongoose');
 var users = {};
 var connections = [];
+
+// mongoose.Promise = global.Promise;
+// mongoose.connect("mongodb://localhost/chat", function(err){
+//     if(err){
+//       console.log(err);
+//     }
+//     else{
+//       console.log("Connected to MongoDB");
+//     }
+// });
+//
+// var chatSchema = mongoose.Schema({
+//   user: String,
+//   msg: String,
+//   sent: {type: Date, default: Date.now}
+// });
+//
+// var Chat = mongoose.model('Message', chatSchema);
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -15,6 +34,17 @@ io.sockets.on('connection', function(socket){
 
     connections.push(socket);
     console.log("Connected: %s sockets connected", connections.length);
+
+  //   Chat.find({}, function(err, messages){
+  //    if(err){
+  //      throw err;
+  //      console.log(err);
+  //    }
+  //    else{
+  //      console.log("Messages Retrived");
+  //      socket.emit('load messages', messages);
+  //    }
+  //  });
 
     socket.on('new user', function(data, callback){
       if(data in users){
@@ -47,10 +77,8 @@ io.sockets.on('connection', function(socket){
           callback("Error! Please enter the username to send this message to");
         }
       }
-      else{
-    io.emit('chat message', {msg: msg, user: socket.user});
-  }
-  });
+        io.emit('chat message', {msg: msg, user: socket.user});
+        });
 
   function updateUsers(){
     io.sockets.emit('usernames', Object.keys(users));

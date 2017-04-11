@@ -91,6 +91,13 @@
           $('.users').html(html);
         });
 
+        // socket.on('load messages', function(messages){
+        //   var html = '';
+        //   for(var i=0; i< messages.length; i++)
+        //   displayMsg(messages[i]);
+        //   }
+        // });
+
         $('#messageForm').submit(function(e){
           e.preventDefault();
           socket.emit('chat message', $('#message').val(), function(data){
@@ -112,6 +119,11 @@
           var html = '<li class="form-control-list private">'+'<strong> '+msg.user+' : </strong> '+msg.msg+'</li>';
           $('#messages').append(html);
         })
+
+        // function displayMsg(msg){
+        //   var html = '<li class="form-control-list">'+'<strong>'+msg.user+' : </strong> '+msg.msg+'</li>';
+        //   $('#messages').append(html);
+        // }
 
       });
     </script>
