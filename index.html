@@ -12,12 +12,12 @@
       .error{color: red;}
       .input{height:60px;}
       .btn{margin-top: 10px;}
-      .well{position: fixed; width:20%;}
+      .well{ @media screen and (min-width: 640px){position: fixed; width:20%;}}
       .private{color: grey; font-style: italic;}
       .btn-private{margin:0; }
       #userWrap {text-align: center; margin: 0 auto; padding-top: 50px;}
       #messageWrap{ display: none;}
-      #userWrap { text-align: center; margin: 0 auto;}
+      #userWrap { text-align: center; margin: 0 40px;}
       #userError{color:red; height:15px;}
       #messages { list-style-type: none; }
       #messages li { padding: 15px 20px; }
@@ -112,7 +112,6 @@
         socket.on('chat message', function(msg){
           var html = '<li class="form-control-list">'+'<strong>'+msg.user+' : </strong> '+msg.msg+'</li>';
           $('#messages').append(html);
-          window.scrollTo(0, document.body.scrollHeight);
         });
 
         socket.on('private message', function(msg){
